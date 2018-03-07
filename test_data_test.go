@@ -68,10 +68,16 @@ func TestCentOSOEM(t *testing.T) {
 	testBiosInformation(t, dmi, "P1.30", "10/27/2006", "American Megatrends Inc.", "8.12")
 	testSystemInformation(t, dmi, "To Be Filled By O.E.M.", "To Be Filled By O.E.M.", "To Be Filled By O.E.M.", "00020003-0004-0005-0006-000700080009", "To Be Filled By O.E.M.")
 }
-func TestUbuntuVMware(t *testing.T) {
+func TestUbuntu1404LTSVirtualBox(t *testing.T) {
 	dmi := testAndReadFile(t, "test_data/ubuntu_14.04_LTS_64bit_vmware.txt")
 	testBiosInformation(t, dmi, "VirtualBox", "12/01/2006", "innotek GmbH", "")
 	testSystemInformation(t, dmi, "innotek GmbH", "VirtualBox", "0", "F548DD5F-057D-4F7F-9465-FC529E045C08", "innotek GmbH VirtualBox")
+}
+
+func TestDebian8Supermicro(t *testing.T) {
+	dmi := testAndReadFile(t, "test_data/debian_8_64bit_supermicro.txt")
+	testBiosInformation(t, dmi, "3.5", "12/16/2013", "American Megatrends Inc.", "8.16")
+	testSystemInformation(t, dmi, "Supermicro", "H8QG6", "1234567890", "11111111-3333-2222-4444-555555555555", "Supermicro H8QG6")
 }
 
 //func TestTemplate(t *testing.T) {
