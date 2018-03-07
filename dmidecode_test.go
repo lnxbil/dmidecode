@@ -91,7 +91,7 @@ func TestParseDmidecode(t *testing.T) {
 		}
 
 		if err := dmi.ParseDmidecode(string(data)); err != nil {
-			t.Errorf("Should not get errors while parsing '%v'. Error:", file, err)
+			t.Errorf("Should not get errors while parsing '%v'. Error: %v", file, err)
 		}
 
 		if len(dmi.Data) == 0 {
