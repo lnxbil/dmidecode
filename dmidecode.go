@@ -12,7 +12,11 @@ import (
 
 // DMI data structure as super-map string
 type DMI struct {
-	Data map[string]map[string]string
+	Data   map[string]map[string]string
+	BIOS   BiosInformation
+	System SystemInformation
+	//	Processor []ProcessorInformation
+	//	Memory    []MemoryDevice
 }
 
 // New is the constructor the returns an instance
@@ -152,7 +156,7 @@ func (d *DMI) ParseDmidecode(output string) error {
 		return errors.New("Unable to parse 'dmidecode' output")
 	}
 
-	return nil
+	return d.parseToStructs()
 }
 
 // GenericSearchBy map lookup method
