@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -12,12 +13,20 @@ const (
 	testDir    string = "test_data"
 )
 
+func skipIfNotLinux(t *testing.T) {
+	if runtime.GOOS != "linux" {
+		t.Skip("not on linux, so dmidecode binary will most probably not be there!")
+		return
+	}
+}
+
 func TestFindBin(t *testing.T) {
 	dmi := New()
 
 	if _, err := dmi.FindBin("time4soup"); err == nil {
 		t.Error("Should not be able to find obscure binary")
 	}
+	skipIfNotLinux(t)
 
 	bin, findErr := dmi.FindBin("dmidecode")
 	if findErr != nil {
@@ -32,6 +41,8 @@ func TestFindBin(t *testing.T) {
 }
 
 func TestExecDmidecode(t *testing.T) {
+	skipIfNotLinux(t)
+
 	dmi := New()
 
 	if _, err := dmi.ExecDmidecode("/bin/" + fakeBinary); err == nil {
@@ -56,25 +67,6 @@ func TestExecDmidecode(t *testing.T) {
 
 func TestParseDmidecode(t *testing.T) {
 	dmi := New()
-
-	bin, findErr := dmi.FindBin("dmidecode")
-	if findErr != nil {
-		t.Errorf("Should be able to find binary. Error: %v", findErr)
-	}
-
-	output, execErr := dmi.ExecDmidecode(bin)
-
-	if execErr != nil {
-		t.Errorf("Should not get errors executing '%v'. Error: %v", bin, execErr)
-	}
-
-	if err := dmi.ParseDmidecode(output); err != nil {
-		t.Error("Should not receive an error after parsing dmidecode output")
-	}
-
-	if len(dmi.Data) == 0 {
-		t.Error("Parsed data structure should have more than 0 entries")
-	}
 
 	files, globErr := filepath.Glob(testDir + "/*")
 	if globErr != nil {
@@ -101,6 +93,7 @@ func TestParseDmidecode(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
+	skipIfNotLinux(t)
 	dmi := New()
 
 	if err := dmi.Run(); err != nil {
@@ -109,6 +102,7 @@ func TestRun(t *testing.T) {
 }
 
 func TestSearchBy(t *testing.T) {
+	skipIfNotLinux(t)
 	dmi := New()
 
 	if _, err := dmi.SearchByName("System Information"); err == nil {
